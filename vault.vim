@@ -20,5 +20,21 @@ function! Encrypt_Vault()
    endif
 endfunction
 
-" call Decrypt_Vault()
-" call Encrypt_Vault()
+function! IsEncrypted()
+   let firstline = getline(1)
+   if firstline =~# '\$ANSIBLE_VAULT'
+      return 1
+   else
+      return 0
+   endif
+endfunction
+
+function! Vault()
+  if IsEncrypted()
+      call Decrypt_Vault()
+  elseif ! IsEncrypted()
+      call Encrypt_Vault()
+  endif
+endfunction
+
+nmap <silent> ;v :call Vault()<CR>
